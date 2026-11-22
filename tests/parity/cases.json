@@ -1,0 +1,93 @@
+[
+    {
+        "name": "empty document",
+        "input": {}
+    },
+    {
+        "name": "wrong types",
+        "input": {
+            "version": 2,
+            "density": "tiny",
+            "radius": {
+                "base": "12"
+            },
+            "mode": {
+                "allowToggle": "yes"
+            },
+            "color": {
+                "dark": {
+                    "accent": "red",
+                    "text": "#abcdef"
+                }
+            }
+        }
+    },
+    {
+        "name": "out of range",
+        "input": {
+            "typography": {
+                "scale": 2,
+                "headingWeight": 900
+            },
+            "layout": {
+                "sidebarWidth": 100
+            },
+            "spacing": {
+                "base": 4.5
+            }
+        }
+    },
+    {
+        "name": "urls",
+        "input": {
+            "branding": {
+                "logoDark": "javascript:alert(1)",
+                "logoLight": "/storage/lumen/logo-light-1.png",
+                "favicon": "https://cdn.example.com/f.ico",
+                "loginBackground": "https://example.com/a b.png"
+            }
+        }
+    },
+    {
+        "name": "fonts and css",
+        "input": {
+            "typography": {
+                "display": "Space Grotesk, sans-serif",
+                "body": "'Inter', system-ui",
+                "mono": "JetBrains Mono;}",
+                "stylesheet": "https://fonts.example.com/css?family=Inter"
+            },
+            "customCss": "  .x{color:red}</style><script>alert(1)</script>  "
+        }
+    },
+    {
+        "name": "floats",
+        "input": {
+            "typography": {
+                "scale": 1.05
+            },
+            "radius": {
+                "base": 0
+            },
+            "density": "compact",
+            "elevation": {
+                "shadow": "strong",
+                "borders": false
+            },
+            "meta": {
+                "name": "Odd */ name"
+            }
+        }
+    },
+    {
+        "name": "markup in names",
+        "input": {
+            "meta": {
+                "name": "</style><script>x</script>"
+            },
+            "branding": {
+                "productName": "<b>Panel</b>"
+            }
+        }
+    }
+]

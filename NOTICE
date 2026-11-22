@@ -1,0 +1,42 @@
+lumen-pterodactyl-theme
+Copyright 2026 Paul Pasaurek
+
+The source code in this repository is licensed under MIT (see the
+LICENSE file). That licence covers the code only.
+
+The names "Luminare Development" and "Luminare", the Luminare logo and mark,
+the name and logo of this project, the README header images, the social
+preview image and all files in docs/brand/ and extension/public/brand/
+(the logo and favicon files of the default preset), as well as the screenshots
+in docs/screenshots/, are not licensed under MIT or under any other licence in
+this repository. In an installed panel those files are in
+.blueprint/extensions/lumen/public/brand/. No permission is granted to use
+them, except as required for reasonable and customary use in describing the
+origin of the work and reproducing the content of this NOTICE file. The
+customizer replaces them with your own logos.
+
+The images in docs/brand/ contain text set in the Sora typeface, converted to
+outlines. Sora is Copyright 2019 The Sora Project Authors and is licensed
+under the SIL Open Font License, Version 1.1 (https://openfontlicense.org).
+extension/public/fonts/Sora-Variable.woff is that font, unchanged except for
+the WOFF container, distributed under the same licence (Sora-OFL.txt next to
+it); it keeps its own licence.
+
+Shared token code
+extension/src/core.ts, extension/app/Tokens/TokenSchema.php,
+extension/app/Tokens/TokenCompiler.php and extension/private/presets/ are
+copies of files from lumen-hydrodactyl-theme (Apache-2.0, same author), kept in
+sync through shared.lock. The PHP copies differ only in their namespace line.
+They are made available here under MIT by their author.
+
+Pterodactyl and Blueprint
+The extension adds its own files to a Pterodactyl Panel with Blueprint; it does
+not ship or change files of Pterodactyl Panel (MIT, Copyright (c) Dane Everitt
+and contributors) or Blueprint (MIT). The CI files in ci/ download both at
+pinned versions to test the extension. The screenshots in docs/screenshots/
+show Pterodactyl running the Lumen theme with invented example data only; the
+parts of Pterodactyl they show keep their own licences.
+
+Not affiliated with or endorsed by the Pterodactyl project or the Blueprint
+project. Pterodactyl and Blueprint are named only to describe what this
+project works with.
