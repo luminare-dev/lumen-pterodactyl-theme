@@ -1,0 +1,37 @@
+info:
+  name: "Lumen"
+  identifier: "lumen"
+  description: "A modern light and dark theme for the client and admin area, with a live customizer for colours, fonts, spacing, layout and logos."
+  flags: "ignorePlaceholders"
+  version: "0.1.0"
+  target: "beta-2026-08"
+  author: "Luminare Development"
+  icon: "icon.svg"
+  website: "https://github.com/luminare-dev/lumen-pterodactyl-theme"
+
+admin:
+  view: "admin/view.blade.php"
+  controller: "admin/controller.php"
+  css: "admin/head.css"
+  wrapper: "admin/wrapper.blade.php"
+
+dashboard:
+  css: ""
+  wrapper: "dashboard/wrapper.blade.php"
+  components: ""
+
+data:
+  directory: "private"
+  public: "public"
+  console: ""
+
+requests:
+  views: "views"
+  app: "app"
+  routers:
+    application: ""
+    client: ""
+    web: "routes/web.php"
+
+database:
+  migrations: "migrations"

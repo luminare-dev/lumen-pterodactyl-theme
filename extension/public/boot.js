@@ -219,6 +219,16 @@
         return 'color-mix(in srgb, ' + color + ' calc(' + trimmed + ' * 100%), transparent)';
     }
 
+    var currentProp = '';
+
+    function slotForProp(slot) {
+        // White and the panel's black are both text and background colours; split them by property.
+        if (/background/.test(currentProp)) {
+            if (slot === 'white') return 'white-bg';
+        }
+        return slot;
+    }
+
     function convertFunc(match, name, args) {
         var alpha = null;
         var body = args;
@@ -264,7 +274,7 @@
         }
         if (rgb.some(isNaN)) return match;
         var slot = slotFor(rgb);
-        return slot ? wrap(slot, alpha) : match;
+        return slot ? wrap(slotForProp(slot), alpha) : match;
     }
 
     function convertHex(match, hex) {
@@ -273,31 +283,87 @@
         var alpha = null;
         if (hex.length === 8) alpha = String(parseInt(hex.slice(6), 16) / 255);
         if (hex.length === 4) alpha = String(parseInt(hex[3] + hex[3], 16) / 255);
-        return wrap(slot, alpha);
+        return wrap(slotForProp(slot), alpha);
     }
 
-    function convertValue(value) {
+    function convertColors(value, prop) {
+        currentProp = prop || '';
         if (!value || !QUICK.test(value) || value.indexOf('--lp-') !== -1 || value.indexOf('url(') !== -1) return value;
         return value.replace(FUNC, convertFunc).replace(HEX, convertHex);
     }
 
-    function convertRuleText(text) {
-        if (!QUICK.test(text)) return text;
-        // Only declaration values change; selectors and at-rule preludes stay as they are.
-        return text.replace(/:([^;{}]*)(?=[;}])/g, function (all, value) {
-            if (value.indexOf('url(') !== -1) return all;
-            return ':' + convertValue(value);
+    // Shadows: the panel's black shadows become the token shadow colour and strength.
+    var BLACK_ALPHA = /rgba?\(\s*0\s*,?\s*0\s*,?\s*0\s*(?:,|\/)\s*([\d.]+%?)\s*\)/g;
+    function convertShadow(value) {
+        return value.replace(BLACK_ALPHA, function (all, alpha) {
+            var a = alpha.slice(-1) === '%' ? parseFloat(alpha) / 100 : parseFloat(alpha);
+            if (!(a > 0)) return all;
+            return 'rgb(var(--lumen-shadow-rgb) / calc(' + a + ' * var(--lumen-shadow-alpha) * 6.67))';
         });
     }
 
-    var SKIP_PROPS = /^(content|grid-template-areas|font-family|--lp-|--lumen-)/;
+    // Tailwind radii (rem) become steps of the token radius.
+    var RADIUS = { '0.125rem': 'xs', '0.25rem': 'md', '0.375rem': 'md', '0.5rem': 'lg', '0.75rem': 'xl', '1rem': '2xl', '1.5rem': '3xl' };
+    function convertRadius(value) {
+        return value.replace(/(^|\s)(0?\.\d+rem|1(?:\.5)?rem)(?=\s|$)/g, function (all, lead, size) {
+            var key = size.charAt(0) === '.' ? '0' + size : size;
+            return RADIUS[key] ? lead + 'var(--radius-' + RADIUS[key] + ')' : all;
+        });
+    }
+
+    // rem lengths in padding and gaps follow the spacing unit and density (4 px = one unit).
+    function convertSpacing(value) {
+        return value.replace(/(^|[\s(,])(-?\d*\.?\d+)rem\b/g, function (all, lead, n) {
+            var units = Math.round(parseFloat(n) * 4 * 1000) / 1000;
+            return lead + 'calc(' + units + ' * var(--spacing))';
+        });
+    }
+
+    function convertFontSize(value) {
+        return value.replace(/(^|\s)(\d*\.?\d+)rem\b/g, function (all, lead, n) {
+            return lead + 'calc(' + n + 'rem * var(--lumen-font-scale))';
+        });
+    }
+
+    function convertFont(value) {
+        if (/IBM Plex/i.test(value)) return 'var(--lumen-font-display)';
+        if (/monospace/i.test(value)) return 'var(--lumen-font-mono)';
+        if (/sans-serif|system-ui/i.test(value)) return 'var(--lumen-font-body)';
+        return value;
+    }
+
+    function convertValue(value, prop) {
+        prop = prop || '';
+        if (!value || value.indexOf('var(--lumen') !== -1 || value.indexOf('var(--spacing') !== -1) return convertColors(value, prop);
+        var out = value;
+        if (/shadow/.test(prop)) out = convertShadow(out);
+        out = convertColors(out, prop);
+        if (/radius/.test(prop)) out = convertRadius(out);
+        else if (/^(padding|gap|row-gap|column-gap)/.test(prop)) out = convertSpacing(out);
+        else if (prop === 'font-size') out = convertFontSize(out);
+        else if (prop === 'font-family') out = convertFont(out);
+        return out;
+    }
+
+    var QUICK_ANY = /#[0-9a-fA-F]{3}|rgb|hsl|rem|font-family/i;
+
+    function convertRuleText(text) {
+        if (!QUICK_ANY.test(text)) return text;
+        // Only declaration values change; selectors and at-rule preludes stay as they are.
+        return text.replace(/([\w-]+)(\s*):([^;{}]*)(?=[;}])/g, function (all, prop, space, value) {
+            if (value.indexOf('url(') !== -1 || SKIP_PROPS.test(prop)) return all;
+            return prop + space + ':' + convertValue(value, prop);
+        });
+    }
+
+    var SKIP_PROPS = /^(content|grid-template-areas|--lp-|--lumen-|--radius|--spacing|--text-|--shadow-|--font-)/;
 
     function convertStyle(style) {
         for (var i = 0; i < style.length; i++) {
             var prop = style[i];
             if (SKIP_PROPS.test(prop)) continue;
             var value = style.getPropertyValue(prop);
-            var next = convertValue(value);
+            var next = convertValue(value, prop);
             if (next !== value) style.setProperty(prop, next, style.getPropertyPriority(prop));
         }
     }
@@ -306,7 +372,7 @@
         if (!rules) return;
         for (var i = 0; i < rules.length; i++) {
             var rule = rules[i];
-            if (rule.style && QUICK.test(rule.cssText)) convertStyle(rule.style);
+            if (rule.style && QUICK_ANY.test(rule.cssText)) convertStyle(rule.style);
             if (rule.cssRules) convertRules(rule.cssRules);
         }
     }
@@ -377,6 +443,39 @@
     /* ------------------------------------------------------------------------------------- */
 
     var branding = cfg.branding || {};
+
+    // "Open the client area with this draft" in the editor: this tab shows the unsaved draft from
+    // localStorage (only in this browser) and follows further edits.
+    var PREVIEW_KEY = 'lumen:preview';
+    var previewing = false;
+    function readPreview() {
+        try {
+            var data = JSON.parse(window.localStorage.getItem(PREVIEW_KEY) || 'null');
+            return data && data.css && Date.now() - data.at < 6 * 3600 * 1000 ? data : null;
+        } catch (e) {
+            return null;
+        }
+    }
+    function applyPreview(data) {
+        var el = document.getElementById('lumen-tokens');
+        if (el) el.textContent = data.css;
+        applyAttributes(data.attributes);
+        if (data.branding) branding = data.branding;
+        root.setAttribute('data-theme', data.mode === 'light' ? 'light' : 'dark');
+        root.style.colorScheme = data.mode === 'light' ? 'light' : 'dark';
+    }
+    if (cfg.area !== 'admin' && /[?&]lumenPreview=1\b/.test(window.location.search)) {
+        var draft = readPreview();
+        if (draft) {
+            previewing = true;
+            applyPreview(draft);
+            window.addEventListener('storage', function (event) {
+                if (event.key !== PREVIEW_KEY) return;
+                var next = readPreview();
+                if (next) applyPreview(next);
+            });
+        }
+    }
 
     function setFavicon() {
         if (!branding.favicon) return;
@@ -512,6 +611,13 @@
     function decorate() {
         if (cfg.area === 'admin') decorateAdmin();
         else decorateClient();
+        if (previewing && document.body && !document.querySelector('.lumen-preview-banner')) {
+            var banner = document.createElement('div');
+            banner.className = 'lumen-preview-banner';
+            banner.setAttribute('data-lumen-own', '');
+            banner.textContent = 'Preview of unsaved appearance changes (only in this browser)';
+            document.body.appendChild(banner);
+        }
     }
 
     if (cfg.area !== 'admin') installPaletteMapping();

@@ -1,0 +1,899 @@
+/*
+ * Lumen theme for Pterodactyl: the admin area (AdminLTE 2, Bootstrap 3, Blueprint pages).
+ *
+ * Reads only the --lumen-* variables and the shared steps (--radius-*, --spacing, --shadow-*,
+ * --text-*) of the token stylesheet, so every preset works in both modes. Every rule is scoped
+ * to :root[data-lumen] and wins over AdminLTE's skin by specificity, not by load order.
+ */
+
+@font-face {
+    font-family: "Sora";
+    src: url("/extensions/lumen/fonts/Sora-Variable.woff") format("woff");
+    font-weight: 100 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+:root[data-lumen] {
+    --lumen-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --lumen-gradient: linear-gradient(135deg, var(--lumen-accent) 0%, var(--lumen-accent-secondary) 100%);
+    --lumen-ring: 0 0 0 3px color-mix(in srgb, var(--lumen-focus) 38%, transparent);
+    --lumen-glass: color-mix(in srgb, var(--lumen-surface) 84%, transparent);
+    --lumen-header: 3.75rem;
+    --lumen-side: var(--sidebar-full-width, 260px);
+    --lumen-gap: calc(4 * var(--spacing));
+    --lumen-muted-bg: color-mix(in srgb, var(--lumen-surface-raised) 70%, var(--lumen-surface));
+}
+
+:root[data-lumen][data-theme="dark"] {
+    --lumen-logo: var(--lumen-logo-dark);
+}
+
+:root[data-lumen][data-theme="light"] {
+    --lumen-logo: var(--lumen-logo-light);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] body,
+:root[data-lumen] .wrapper,
+:root[data-lumen] .content-wrapper,
+:root[data-lumen] .main-footer {
+    font-family: var(--lumen-font-body);
+    font-size: calc(0.875rem * var(--lumen-font-scale));
+    color: var(--lumen-text);
+    background-color: var(--lumen-canvas);
+    -webkit-font-smoothing: antialiased;
+}
+
+:root[data-lumen][data-lumen-glow="on"] .wrapper {
+    background-image:
+        radial-gradient(70rem 42rem at -10% -20%, var(--lumen-glow), transparent 62%),
+        radial-gradient(56rem 36rem at 110% -10%, var(--lumen-glow-secondary), transparent 60%);
+    background-attachment: fixed;
+}
+
+:root[data-lumen] .content-wrapper,
+:root[data-lumen] .main-footer {
+    background: transparent;
+}
+
+:root[data-lumen] :is(h1, h2, h3, h4, h5, h6, .box-title, .modal-title) {
+    font-family: var(--lumen-font-display);
+    font-weight: var(--lumen-heading-weight);
+    letter-spacing: -0.01em;
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] :is(code, pre, kbd, samp, .form-control[readonly][style*="monospace"]) {
+    font-family: var(--lumen-font-mono);
+}
+
+:root[data-lumen] code {
+    padding: 0.1em 0.4em;
+    border-radius: var(--radius-sm);
+    background: var(--lumen-surface-raised);
+    color: var(--lumen-accent-text);
+}
+
+:root[data-lumen] pre {
+    border: 1px solid var(--lumen-border-color);
+    border-radius: var(--radius-lg);
+    background: var(--lumen-surface-sunken);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] a {
+    color: var(--lumen-accent-text);
+}
+
+:root[data-lumen] a:hover,
+:root[data-lumen] a:focus {
+    color: color-mix(in srgb, var(--lumen-accent-text) 80%, var(--lumen-text));
+}
+
+:root[data-lumen] .text-muted,
+:root[data-lumen] .help-block,
+:root[data-lumen] small {
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] .text-danger { color: var(--lumen-danger); }
+:root[data-lumen] .text-success { color: var(--lumen-success); }
+:root[data-lumen] .text-warning { color: var(--lumen-warning); }
+:root[data-lumen] .text-info,
+:root[data-lumen] .text-primary { color: var(--lumen-info); }
+
+:root[data-lumen] hr {
+    border-color: var(--lumen-border-color);
+}
+
+:root[data-lumen] ::selection {
+    background: color-mix(in srgb, var(--lumen-accent) 32%, transparent);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] :focus-visible {
+    outline: 2px solid var(--lumen-focus);
+    outline-offset: 2px;
+}
+
+:root[data-lumen] * {
+    scrollbar-color: color-mix(in srgb, var(--lumen-text-muted) 35%, transparent) transparent;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Header
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .main-header {
+    max-height: none;
+}
+
+:root[data-lumen] .main-header .logo,
+:root[data-lumen] .main-header .navbar {
+    height: var(--lumen-header);
+    border: 0;
+    background: color-mix(in srgb, var(--lumen-surface-sunken) 82%, transparent) !important;
+    backdrop-filter: blur(18px) saturate(1.2);
+}
+
+:root[data-lumen] .main-header .navbar {
+    border-bottom: 1px solid var(--lumen-border-color);
+    margin-left: var(--lumen-side);
+}
+
+:root[data-lumen] .main-header .logo {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    width: var(--lumen-side);
+    padding: 0 1.25rem;
+    border-bottom: 1px solid var(--lumen-border-color);
+    border-right: 0;
+    font-family: var(--lumen-font-display);
+    font-size: calc(1.125rem * var(--lumen-font-scale));
+    font-weight: var(--lumen-heading-weight);
+    letter-spacing: -0.02em;
+    line-height: var(--lumen-header);
+    text-align: left;
+    color: var(--lumen-text) !important;
+}
+
+:root[data-lumen] .main-header .logo > span:not(.lumen-logo) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+:root[data-lumen] .lumen-logo {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+}
+
+:root[data-lumen] .lumen-logo img {
+    display: block;
+    height: 100%;
+    width: auto;
+}
+
+:root[data-lumen][data-theme="dark"] .lumen-logo .lumen-logo-light,
+:root[data-lumen][data-theme="light"] .lumen-logo .lumen-logo-dark {
+    display: none;
+}
+
+:root[data-lumen] .lumen-admin-logo {
+    height: 1.75rem;
+}
+
+:root[data-lumen] .main-header .navbar .sidebar-toggle,
+:root[data-lumen] .main-header .navbar .nav > li > a {
+    height: calc(var(--lumen-header) - 1rem);
+    margin: 0.5rem 0.125rem;
+    padding: 0 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: var(--radius-lg);
+    color: var(--lumen-text-muted) !important;
+    background: transparent;
+    transition: background-color 0.15s var(--lumen-ease), color 0.15s var(--lumen-ease);
+}
+
+:root[data-lumen] .main-header .navbar .sidebar-toggle:hover,
+:root[data-lumen] .main-header .navbar .nav > li > a:hover {
+    background: var(--lumen-surface-raised) !important;
+    color: var(--lumen-text) !important;
+}
+
+:root[data-lumen] .main-header .navbar .sidebar-toggle .icon-bar {
+    background: currentColor;
+}
+
+:root[data-lumen] .main-header .user-image {
+    margin: 0;
+    width: 1.75rem;
+    height: 1.75rem;
+    border: 2px solid var(--lumen-border);
+}
+
+:root[data-lumen] .lumen-mode-toggle svg {
+    width: 1.1rem;
+    height: 1.1rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+:root[data-lumen][data-lumen-toggle="off"] .lumen-mode-item {
+    display: none !important;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Sidebar
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .main-sidebar,
+:root[data-lumen] .left-side {
+    width: var(--lumen-side);
+    padding-top: var(--lumen-header);
+    background: var(--lumen-surface-sunken) !important;
+    border-right: 1px solid var(--lumen-border-color);
+}
+
+:root[data-lumen][data-lumen-sidebar="floating"] .main-sidebar {
+    top: calc(var(--lumen-header) + 0.75rem);
+    bottom: 0.75rem;
+    left: 0.75rem;
+    width: calc(var(--lumen-side) - 1.5rem);
+    min-height: 0;
+    height: auto;
+    padding-top: 0;
+    border: 1px solid var(--lumen-border-color);
+    border-radius: var(--radius-2xl);
+    background: var(--lumen-glass) !important;
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(18px);
+}
+
+:root[data-lumen][data-lumen-sidebar="floating"] .main-sidebar .sidebar {
+    height: 100% !important;
+    padding: 0.5rem 0.5rem 1rem;
+    overflow-y: auto;
+}
+
+:root[data-lumen] .sidebar-menu > li.header {
+    padding: 1.1rem 1rem 0.4rem;
+    background: transparent !important;
+    color: var(--lumen-text-muted) !important;
+    font-family: var(--lumen-font-display);
+    font-size: calc(0.6875rem * var(--lumen-font-scale));
+    font-weight: 600;
+    letter-spacing: 0.08em;
+}
+
+:root[data-lumen] .sidebar-menu > li > a {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin: 0.125rem 0.375rem;
+    padding: calc(2.5 * var(--spacing)) 0.875rem;
+    border: 1px solid transparent;
+    border-left: 0;
+    border-radius: var(--radius-lg);
+    color: var(--lumen-text-muted) !important;
+    font-weight: 500;
+    background: transparent !important;
+    transition: background-color 0.15s var(--lumen-ease), color 0.15s var(--lumen-ease);
+}
+
+:root[data-lumen] .sidebar-menu > li > a > .fa {
+    width: 1.1rem;
+    text-align: center;
+    opacity: 0.85;
+}
+
+:root[data-lumen] .sidebar-menu > li:hover > a {
+    background: var(--lumen-surface-raised) !important;
+    color: var(--lumen-text) !important;
+}
+
+:root[data-lumen] .sidebar-menu > li.active > a {
+    border-color: color-mix(in srgb, var(--lumen-accent) 30%, transparent);
+    background: color-mix(in srgb, var(--lumen-accent) 13%, transparent) !important;
+    color: var(--lumen-accent-text) !important;
+}
+
+:root[data-lumen][data-lumen-indicator="bar"] .sidebar-menu > li.active > a {
+    border-color: transparent;
+    background: var(--lumen-surface-raised) !important;
+    box-shadow: inset 3px 0 0 var(--lumen-accent);
+    color: var(--lumen-text) !important;
+}
+
+:root[data-lumen][data-lumen-indicator="glow"] .sidebar-menu > li.active > a {
+    border-color: color-mix(in srgb, var(--lumen-accent) 45%, transparent);
+    background: linear-gradient(90deg, color-mix(in srgb, var(--lumen-accent) 24%, transparent), color-mix(in srgb, var(--lumen-accent-secondary) 10%, transparent)) !important;
+    box-shadow: 0 0 24px -6px color-mix(in srgb, var(--lumen-accent) 55%, transparent);
+    color: var(--lumen-text) !important;
+}
+
+:root[data-lumen] .content-wrapper,
+:root[data-lumen] .main-footer {
+    margin-left: var(--lumen-side);
+}
+
+:root[data-lumen] .content-wrapper {
+    padding-top: var(--lumen-header);
+}
+
+/* Collapsed sidebar (AdminLTE's toggle) */
+@media (min-width: 768px) {
+    :root[data-lumen] .sidebar-collapse .main-header .navbar,
+    :root[data-lumen] .sidebar-collapse .content-wrapper,
+    :root[data-lumen] .sidebar-collapse .main-footer {
+        margin-left: 4.5rem;
+    }
+
+    :root[data-lumen] .sidebar-collapse .main-header .logo {
+        width: 4.5rem;
+        justify-content: center;
+        padding: 0;
+    }
+
+    :root[data-lumen] .sidebar-collapse .main-header .logo > span:not(.lumen-logo) {
+        display: none;
+    }
+
+    :root[data-lumen] .sidebar-collapse .main-sidebar {
+        width: 3.75rem;
+    }
+
+    :root[data-lumen] .sidebar-collapse .sidebar-menu > li > a > span,
+    :root[data-lumen] .sidebar-collapse .sidebar-menu > li.header {
+        display: none;
+    }
+}
+
+@media (max-width: 767px) {
+    :root[data-lumen] .main-header .navbar,
+    :root[data-lumen] .content-wrapper,
+    :root[data-lumen] .main-footer {
+        margin-left: 0;
+    }
+
+    :root[data-lumen] .main-header .logo {
+        width: 100%;
+    }
+
+    :root[data-lumen] .main-header .navbar {
+        margin-top: 0;
+    }
+
+    :root[data-lumen] .content-wrapper {
+        padding-top: calc(var(--lumen-header) * 2);
+    }
+}
+
+/* ------------------------------------------------------------------------------------------
+   Content header and breadcrumb
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .content-header {
+    padding: calc(6 * var(--spacing)) calc(6 * var(--spacing)) 0;
+}
+
+:root[data-lumen] .content-header > h1 {
+    font-size: calc(1.75rem * var(--lumen-font-scale));
+    letter-spacing: -0.025em;
+}
+
+:root[data-lumen] .content-header > h1 > small {
+    display: block;
+    margin-top: 0.35rem;
+    padding-left: 0;
+    font-family: var(--lumen-font-body);
+    font-size: calc(0.875rem * var(--lumen-font-scale));
+    font-weight: 400;
+    letter-spacing: 0;
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] .content-header > .breadcrumb {
+    top: calc(6 * var(--spacing));
+    right: calc(6 * var(--spacing));
+    padding: 0.4rem 0.75rem;
+    border: 1px solid var(--lumen-border-color);
+    border-radius: 999px;
+    background: var(--lumen-glass);
+    font-size: calc(0.75rem * var(--lumen-font-scale));
+}
+
+:root[data-lumen] .breadcrumb > li,
+:root[data-lumen] .breadcrumb > li + li::before,
+:root[data-lumen] .breadcrumb > .active {
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] .content {
+    padding: calc(5 * var(--spacing)) calc(6 * var(--spacing)) calc(8 * var(--spacing));
+}
+
+:root[data-lumen][data-lumen-width="wide"] .content,
+:root[data-lumen][data-lumen-width="wide"] .content-header {
+    max-width: 1440px;
+}
+
+:root[data-lumen][data-lumen-width="narrow"] .content,
+:root[data-lumen][data-lumen-width="narrow"] .content-header {
+    max-width: 1200px;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Boxes (cards), small boxes, info boxes, callouts
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .box,
+:root[data-lumen] .nav-tabs-custom,
+:root[data-lumen] .info-box,
+:root[data-lumen] .small-box,
+:root[data-lumen] .modal-content,
+:root[data-lumen] .panel {
+    border: 1px solid var(--lumen-border-color);
+    border-radius: var(--radius-xl);
+    background: var(--lumen-surface);
+    color: var(--lumen-text);
+    box-shadow: var(--shadow-md);
+}
+
+:root[data-lumen] .box {
+    margin-bottom: var(--lumen-gap);
+    border-top: 1px solid var(--lumen-border-color);
+    overflow: hidden;
+}
+
+:root[data-lumen] .box.box-primary,
+:root[data-lumen] .box.box-info { border-top: 2px solid var(--lumen-accent); }
+:root[data-lumen] .box.box-success { border-top: 2px solid var(--lumen-success); }
+:root[data-lumen] .box.box-warning { border-top: 2px solid var(--lumen-warning); }
+:root[data-lumen] .box.box-danger { border-top: 2px solid var(--lumen-danger); }
+:root[data-lumen] .box.box-default { border-top: 1px solid var(--lumen-border-color); }
+
+:root[data-lumen] .box-header {
+    padding: calc(4 * var(--spacing)) calc(5 * var(--spacing));
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .box-header.with-border {
+    border-bottom: 1px solid var(--lumen-border-color);
+}
+
+:root[data-lumen] .box-header .box-title {
+    font-size: calc(1rem * var(--lumen-font-scale));
+}
+
+:root[data-lumen] .box-body {
+    padding: calc(5 * var(--spacing));
+}
+
+:root[data-lumen] .box-body.table-responsive.no-padding,
+:root[data-lumen] .box-body.no-padding {
+    padding: 0;
+}
+
+:root[data-lumen] .box-footer {
+    padding: calc(4 * var(--spacing)) calc(5 * var(--spacing));
+    border-top: 1px solid var(--lumen-border-color);
+    background: var(--lumen-muted-bg);
+}
+
+:root[data-lumen] .box .overlay,
+:root[data-lumen] .overlay-wrapper .overlay {
+    background: color-mix(in srgb, var(--lumen-surface) 70%, transparent);
+}
+
+:root[data-lumen] .small-box,
+:root[data-lumen] .info-box {
+    overflow: hidden;
+}
+
+:root[data-lumen] .info-box-icon,
+:root[data-lumen] .small-box .icon {
+    border-radius: var(--radius-lg);
+    background: color-mix(in srgb, var(--lumen-accent) 15%, transparent) !important;
+    color: var(--lumen-accent-text) !important;
+}
+
+:root[data-lumen] .info-box-content {
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .callout,
+:root[data-lumen] .alert {
+    border: 1px solid var(--lumen-border-color);
+    border-left-width: 4px;
+    border-radius: var(--radius-lg);
+    background: var(--lumen-surface) !important;
+    color: var(--lumen-text) !important;
+    box-shadow: var(--shadow-sm);
+}
+
+:root[data-lumen] .callout :is(h4, p, a),
+:root[data-lumen] .alert :is(h4, p, a, strong) {
+    color: inherit !important;
+}
+
+:root[data-lumen] :is(.callout-danger, .alert-danger) { border-left-color: var(--lumen-danger); background: color-mix(in srgb, var(--lumen-danger) 10%, var(--lumen-surface)) !important; }
+:root[data-lumen] :is(.callout-success, .alert-success) { border-left-color: var(--lumen-success); background: color-mix(in srgb, var(--lumen-success) 10%, var(--lumen-surface)) !important; }
+:root[data-lumen] :is(.callout-warning, .alert-warning) { border-left-color: var(--lumen-warning); background: color-mix(in srgb, var(--lumen-warning) 10%, var(--lumen-surface)) !important; }
+:root[data-lumen] :is(.callout-info, .alert-info) { border-left-color: var(--lumen-info); background: color-mix(in srgb, var(--lumen-info) 10%, var(--lumen-surface)) !important; }
+
+/* ------------------------------------------------------------------------------------------
+   Tables
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .table {
+    margin-bottom: 0;
+    color: var(--lumen-text);
+    background: transparent;
+}
+
+:root[data-lumen] .table > :is(thead, tbody, tfoot) > tr > :is(th, td) {
+    padding: calc(3 * var(--spacing)) calc(4 * var(--spacing));
+    border-top: 1px solid var(--lumen-border-color);
+    vertical-align: middle;
+}
+
+:root[data-lumen] .table > thead > tr > th,
+:root[data-lumen] .table > tbody > tr:first-child > th {
+    border-top: 0;
+    border-bottom: 1px solid var(--lumen-border-color);
+    background: var(--lumen-muted-bg);
+    color: var(--lumen-text-muted);
+    font-family: var(--lumen-font-display);
+    font-size: calc(0.75rem * var(--lumen-font-scale));
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+}
+
+:root[data-lumen] .table-hover > tbody > tr:hover {
+    background: color-mix(in srgb, var(--lumen-accent) 6%, transparent);
+}
+
+:root[data-lumen] .table-striped > tbody > tr:nth-of-type(odd) {
+    background: color-mix(in srgb, var(--lumen-surface-raised) 50%, transparent);
+}
+
+:root[data-lumen] .table-bordered,
+:root[data-lumen] .table-bordered > :is(thead, tbody) > tr > :is(th, td) {
+    border-color: var(--lumen-border-color);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Forms
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .form-control,
+:root[data-lumen] .input-group-addon,
+:root[data-lumen] .select2-container--default .select2-selection--single,
+:root[data-lumen] .select2-container--default .select2-selection--multiple {
+    min-height: calc(9 * var(--spacing) + 2px);
+    border: 1px solid var(--lumen-border);
+    border-radius: var(--radius-lg);
+    background: var(--lumen-surface-sunken);
+    color: var(--lumen-text);
+    box-shadow: none;
+    transition: border-color 0.15s var(--lumen-ease), box-shadow 0.15s var(--lumen-ease);
+}
+
+:root[data-lumen] .form-control::placeholder {
+    color: color-mix(in srgb, var(--lumen-text-muted) 70%, transparent);
+}
+
+:root[data-lumen] .form-control:focus,
+:root[data-lumen] .select2-container--default.select2-container--focus .select2-selection--multiple,
+:root[data-lumen] .select2-container--default.select2-container--open .select2-selection--single {
+    border-color: var(--lumen-focus);
+    box-shadow: var(--lumen-ring);
+}
+
+:root[data-lumen] .form-control[disabled],
+:root[data-lumen] .form-control[readonly] {
+    background: var(--lumen-muted-bg);
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] .input-group-addon {
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] .input-group > .form-control:not(:first-child),
+:root[data-lumen] .input-group > .input-group-addon:not(:first-child) {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+:root[data-lumen] .input-group > .form-control:not(:last-child),
+:root[data-lumen] .input-group > .input-group-addon:not(:last-child) {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+:root[data-lumen] .control-label,
+:root[data-lumen] .form-label,
+:root[data-lumen] label {
+    color: var(--lumen-text);
+    font-weight: 600;
+}
+
+:root[data-lumen] select.form-control option {
+    background: var(--lumen-surface);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .select2-container--default .select2-selection--single .select2-selection__rendered,
+:root[data-lumen] .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .select2-container--default .select2-selection--multiple .select2-selection__choice {
+    border: 1px solid var(--lumen-border);
+    border-radius: var(--radius-md);
+    background: var(--lumen-surface-raised);
+}
+
+:root[data-lumen] .select2-dropdown,
+:root[data-lumen] .select2-search__field {
+    border-color: var(--lumen-border) !important;
+    background: var(--lumen-surface) !important;
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .select2-container--default .select2-results__option[aria-selected="true"] {
+    background: var(--lumen-surface-raised);
+}
+
+:root[data-lumen] .select2-container--default .select2-results__option--highlighted[aria-selected] {
+    background: var(--lumen-accent);
+    color: var(--lumen-accent-contrast);
+}
+
+:root[data-lumen] :is(input[type="checkbox"], input[type="radio"]) {
+    accent-color: var(--lumen-accent);
+}
+
+:root[data-lumen] .checkbox label::before,
+:root[data-lumen] .radio label::before {
+    border-color: var(--lumen-border);
+    background: var(--lumen-surface-sunken);
+}
+
+:root[data-lumen] .checkbox-primary input[type="checkbox"]:checked + label::before,
+:root[data-lumen] .radio-primary input[type="radio"]:checked + label::after {
+    border-color: var(--lumen-accent);
+    background-color: var(--lumen-accent);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Buttons, labels, badges
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .btn {
+    border: 1px solid transparent;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+    box-shadow: none;
+    transition: filter 0.15s var(--lumen-ease), background-color 0.15s var(--lumen-ease), transform 0.15s var(--lumen-ease);
+}
+
+:root[data-lumen] .btn:hover {
+    filter: brightness(1.06);
+}
+
+:root[data-lumen] .btn:active {
+    transform: translateY(1px);
+}
+
+:root[data-lumen] .btn-primary,
+:root[data-lumen] .btn-info {
+    border-color: transparent;
+    background: var(--lumen-gradient);
+    color: var(--lumen-accent-contrast) !important;
+    box-shadow: 0 6px 16px -8px color-mix(in srgb, var(--lumen-accent) 70%, transparent);
+}
+
+:root[data-lumen] .btn-success { background: var(--lumen-success); border-color: transparent; color: var(--lumen-surface) !important; }
+:root[data-lumen] .btn-danger { background: var(--lumen-danger); border-color: transparent; color: var(--lumen-surface) !important; }
+:root[data-lumen] .btn-warning { background: var(--lumen-warning); border-color: transparent; color: var(--lumen-surface) !important; }
+
+:root[data-lumen] .btn-default,
+:root[data-lumen] .btn-gray,
+:root[data-lumen] .btn-gray-alt {
+    border-color: var(--lumen-border);
+    background: var(--lumen-surface-raised);
+    color: var(--lumen-text) !important;
+}
+
+:root[data-lumen] .btn-link {
+    color: var(--lumen-accent-text);
+}
+
+:root[data-lumen] .btn.disabled,
+:root[data-lumen] .btn[disabled] {
+    opacity: 0.55;
+}
+
+:root[data-lumen] .label,
+:root[data-lumen] .badge,
+:root[data-lumen] tag {
+    display: inline-block;
+    padding: 0.25em 0.6em;
+    border-radius: 999px;
+    font-weight: 600;
+    background: var(--lumen-surface-raised);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .label-primary, :root[data-lumen] .bg-blue, :root[data-lumen] tag[blue] { background: color-mix(in srgb, var(--lumen-accent) 18%, transparent) !important; color: var(--lumen-accent-text) !important; }
+:root[data-lumen] .label-success, :root[data-lumen] .bg-green, :root[data-lumen] tag[green] { background: color-mix(in srgb, var(--lumen-success) 18%, transparent) !important; color: var(--lumen-success) !important; }
+:root[data-lumen] .label-danger, :root[data-lumen] .bg-red, :root[data-lumen] tag[red] { background: color-mix(in srgb, var(--lumen-danger) 18%, transparent) !important; color: var(--lumen-danger) !important; }
+:root[data-lumen] .label-warning, :root[data-lumen] .bg-yellow { background: color-mix(in srgb, var(--lumen-warning) 18%, transparent) !important; color: var(--lumen-warning) !important; }
+:root[data-lumen] .label-info, :root[data-lumen] .bg-aqua { background: color-mix(in srgb, var(--lumen-info) 18%, transparent) !important; color: var(--lumen-info) !important; }
+:root[data-lumen] .label-default, :root[data-lumen] .bg-gray { background: var(--lumen-surface-raised) !important; color: var(--lumen-text-muted) !important; }
+
+/* ------------------------------------------------------------------------------------------
+   Tabs, pagination, modals, dropdowns, tooltips
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .nav-tabs-custom > .nav-tabs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+    padding: 0.375rem;
+    border-bottom: 1px solid var(--lumen-border-color);
+    background: var(--lumen-muted-bg);
+}
+
+:root[data-lumen] .nav-tabs-custom > .nav-tabs > li {
+    margin: 0;
+    border: 0;
+}
+
+:root[data-lumen] .nav-tabs-custom > .nav-tabs > li > a {
+    margin: 0;
+    padding: 0.5rem 0.875rem;
+    border: 0;
+    border-radius: var(--radius-lg);
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] .nav-tabs-custom > .nav-tabs > li > a:hover {
+    background: var(--lumen-surface-raised);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .nav-tabs-custom > .nav-tabs > li.active > a,
+:root[data-lumen] .nav-tabs-custom > .nav-tabs > li.active:hover > a {
+    background: color-mix(in srgb, var(--lumen-accent) 14%, transparent);
+    color: var(--lumen-accent-text);
+}
+
+:root[data-lumen] .nav-tabs-custom > .tab-content {
+    background: transparent;
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .pagination > li > :is(a, span) {
+    margin: 0 0.125rem;
+    border: 1px solid var(--lumen-border-color);
+    border-radius: var(--radius-md) !important;
+    background: var(--lumen-surface);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .pagination > .active > :is(a, span) {
+    border-color: transparent;
+    background: var(--lumen-accent);
+    color: var(--lumen-accent-contrast);
+}
+
+:root[data-lumen] .modal-backdrop.in {
+    opacity: 0.6;
+    background: var(--lumen-canvas);
+}
+
+:root[data-lumen] .modal-content {
+    overflow: hidden;
+    border-radius: var(--radius-2xl);
+    box-shadow: var(--shadow-2xl);
+}
+
+:root[data-lumen] .modal-header,
+:root[data-lumen] .modal-body,
+:root[data-lumen] .modal-footer {
+    border-color: var(--lumen-border-color) !important;
+    background: var(--lumen-surface);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .modal-header .close {
+    color: var(--lumen-text) !important;
+    opacity: 0.6;
+    text-shadow: none;
+}
+
+:root[data-lumen] .dropdown-menu {
+    border: 1px solid var(--lumen-border-color);
+    border-radius: var(--radius-lg);
+    background: var(--lumen-surface);
+    box-shadow: var(--shadow-xl);
+}
+
+:root[data-lumen] .dropdown-menu > li > a {
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .dropdown-menu > li > a:hover {
+    background: var(--lumen-surface-raised);
+}
+
+:root[data-lumen] .tooltip-inner {
+    padding: 0.35rem 0.6rem;
+    border-radius: var(--radius-md);
+    background: var(--lumen-text);
+    color: var(--lumen-canvas);
+}
+
+:root[data-lumen] .tooltip.bottom .tooltip-arrow { border-bottom-color: var(--lumen-text); }
+:root[data-lumen] .tooltip.top .tooltip-arrow { border-top-color: var(--lumen-text); }
+
+:root[data-lumen] .sweet-alert {
+    border-radius: var(--radius-2xl);
+    background: var(--lumen-surface);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] .sweet-alert :is(h2, p) {
+    color: var(--lumen-text);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Blueprint pages (extension list, extension header)
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .extension-btn {
+    border: 1px solid var(--lumen-border-color) !important;
+    border-radius: var(--radius-xl) !important;
+    background: var(--lumen-surface) !important;
+    box-shadow: var(--shadow-sm);
+}
+
+:root[data-lumen] :is(.extension-btn-text, .extension-btn-version) {
+    color: var(--lumen-text) !important;
+}
+
+:root[data-lumen] .ext-description {
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] .main-footer {
+    border-top: 1px solid var(--lumen-border-color);
+    color: var(--lumen-text-muted);
+    font-size: calc(0.75rem * var(--lumen-font-scale));
+}
+
+:root[data-lumen] .main-footer a {
+    color: var(--lumen-text-muted);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root[data-lumen] * {
+        transition: none !important;
+    }
+}

@@ -12,3 +12,4 @@ node_modules/
 !.env.example
 server.cfg
 ci/.env
+extension/public/js/

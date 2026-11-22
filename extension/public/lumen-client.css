@@ -1,0 +1,730 @@
+/*
+ * Lumen theme for Pterodactyl: client area, login and every React page.
+ *
+ * Colours come from the token stylesheet (<style id="lumen-tokens">). boot.js rewrites the
+ * panel's own rules so their fixed palette reads the --lp-* slots below, their radii the
+ * --radius-* steps, their padding the spacing unit and their fonts the token fonts. This file
+ * defines the slots and adds the layout and component refinements. Every rule is scoped to
+ * :root[data-lumen], which boot.js sets, and nothing here needs a rebuild of the panel.
+ */
+
+@font-face {
+    font-family: "Sora";
+    src: url("/extensions/lumen/fonts/Sora-Variable.woff") format("woff");
+    font-weight: 100 800;
+    font-style: normal;
+    font-display: swap;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Palette slots: the panel's colours, by role. Light and dark use the same roles, so the
+   panel's dark design turns into a light one by itself.
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] {
+    --lumen-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+    --lumen-gradient: linear-gradient(135deg, var(--lumen-accent) 0%, var(--lumen-accent-secondary) 100%);
+    --lumen-ring: 0 0 0 3px color-mix(in srgb, var(--lumen-focus) 38%, transparent);
+    --lumen-glass: color-mix(in srgb, var(--lumen-surface) 82%, transparent);
+    --lumen-nav-height: 3.75rem;
+
+    --lp-grey-50: var(--lumen-text);
+    --lp-grey-100: var(--lumen-text);
+    --lp-grey-200: color-mix(in srgb, var(--lumen-text) 55%, var(--lumen-text-muted));
+    --lp-grey-300: var(--lumen-text-muted);
+    --lp-grey-400: color-mix(in srgb, var(--lumen-text-muted) 82%, var(--lumen-border));
+    --lp-grey-500: color-mix(in srgb, var(--lumen-border) 62%, var(--lumen-text-muted));
+    --lp-grey-600: var(--lumen-surface-raised);
+    --lp-grey-700: var(--lumen-surface);
+    --lp-grey-800: var(--lumen-canvas);
+    --lp-grey-900: var(--lumen-surface-sunken);
+
+    --lp-accent-50: var(--lumen-accent-contrast);
+    --lp-accent-100: color-mix(in srgb, var(--lumen-accent-text) 45%, var(--lumen-text));
+    --lp-accent-200: color-mix(in srgb, var(--lumen-accent-text) 70%, var(--lumen-text));
+    --lp-accent-300: var(--lumen-accent-text);
+    --lp-accent-400: var(--lumen-accent-text);
+    --lp-accent-500: color-mix(in srgb, var(--lumen-accent) 88%, var(--lumen-text));
+    --lp-accent-600: var(--lumen-accent);
+    --lp-accent-700: color-mix(in srgb, var(--lumen-accent) 78%, var(--lumen-canvas));
+    --lp-accent-800: color-mix(in srgb, var(--lumen-accent) 55%, var(--lumen-canvas));
+    --lp-accent-900: color-mix(in srgb, var(--lumen-accent) 30%, var(--lumen-canvas));
+
+    --lp-white: var(--lumen-text);
+    --lp-white-bg: var(--lumen-surface);
+    --lp-black: var(--lumen-console-bg);
+}
+
+:root[data-lumen] {
+    --lp-danger-50: var(--lumen-surface);
+    --lp-danger-100: color-mix(in srgb, var(--lumen-danger) 40%, var(--lumen-text));
+    --lp-danger-200: color-mix(in srgb, var(--lumen-danger) 60%, var(--lumen-text));
+    --lp-danger-300: color-mix(in srgb, var(--lumen-danger) 80%, var(--lumen-text));
+    --lp-danger-400: var(--lumen-danger);
+    --lp-danger-500: var(--lumen-danger);
+    --lp-danger-600: color-mix(in srgb, var(--lumen-danger) 85%, var(--lumen-canvas));
+    --lp-danger-700: color-mix(in srgb, var(--lumen-danger) 60%, var(--lumen-canvas));
+    --lp-danger-800: color-mix(in srgb, var(--lumen-danger) 35%, var(--lumen-canvas));
+    --lp-danger-900: color-mix(in srgb, var(--lumen-danger) 22%, var(--lumen-canvas));
+
+    --lp-success-50: var(--lumen-surface);
+    --lp-success-100: color-mix(in srgb, var(--lumen-success) 40%, var(--lumen-text));
+    --lp-success-200: color-mix(in srgb, var(--lumen-success) 60%, var(--lumen-text));
+    --lp-success-300: color-mix(in srgb, var(--lumen-success) 80%, var(--lumen-text));
+    --lp-success-400: var(--lumen-success);
+    --lp-success-500: var(--lumen-success);
+    --lp-success-600: color-mix(in srgb, var(--lumen-success) 85%, var(--lumen-canvas));
+    --lp-success-700: color-mix(in srgb, var(--lumen-success) 60%, var(--lumen-canvas));
+    --lp-success-800: color-mix(in srgb, var(--lumen-success) 35%, var(--lumen-canvas));
+    --lp-success-900: color-mix(in srgb, var(--lumen-success) 22%, var(--lumen-canvas));
+
+    --lp-warning-50: var(--lumen-surface);
+    --lp-warning-100: color-mix(in srgb, var(--lumen-warning) 40%, var(--lumen-text));
+    --lp-warning-200: color-mix(in srgb, var(--lumen-warning) 60%, var(--lumen-text));
+    --lp-warning-300: color-mix(in srgb, var(--lumen-warning) 80%, var(--lumen-text));
+    --lp-warning-400: var(--lumen-warning);
+    --lp-warning-500: var(--lumen-warning);
+    --lp-warning-600: color-mix(in srgb, var(--lumen-warning) 85%, var(--lumen-canvas));
+    --lp-warning-700: color-mix(in srgb, var(--lumen-warning) 60%, var(--lumen-canvas));
+    --lp-warning-800: color-mix(in srgb, var(--lumen-warning) 35%, var(--lumen-canvas));
+    --lp-warning-900: color-mix(in srgb, var(--lumen-warning) 22%, var(--lumen-canvas));
+}
+
+:root[data-lumen][data-theme="dark"] {
+    --lumen-logo: var(--lumen-logo-dark);
+}
+
+:root[data-lumen][data-theme="light"] {
+    --lumen-logo: var(--lumen-logo-light);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Base
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen],
+:root[data-lumen] body {
+    font-family: var(--lumen-font-body);
+    color: var(--lumen-text);
+    background-color: var(--lumen-canvas);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0;
+}
+
+:root[data-lumen] body {
+    min-height: 100vh;
+    font-size: calc(1rem * var(--lumen-font-scale));
+}
+
+:root[data-lumen][data-lumen-glow="on"] body {
+    background-image:
+        radial-gradient(70rem 42rem at -10% -20%, var(--lumen-glow), transparent 62%),
+        radial-gradient(56rem 36rem at 110% -10%, var(--lumen-glow-secondary), transparent 60%);
+    background-attachment: fixed;
+}
+
+:root[data-lumen] :is(h1, h2, h3, h4, h5, h6) {
+    font-family: var(--lumen-font-display);
+    font-weight: var(--lumen-heading-weight);
+    letter-spacing: -0.015em;
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] :is(code, pre, kbd, samp) {
+    font-family: var(--lumen-font-mono);
+}
+
+:root[data-lumen] ::selection {
+    background: color-mix(in srgb, var(--lumen-accent) 32%, transparent);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] :focus-visible {
+    outline: 2px solid var(--lumen-focus);
+    outline-offset: 2px;
+}
+
+:root[data-lumen] * {
+    scrollbar-color: color-mix(in srgb, var(--lumen-text-muted) 35%, transparent) transparent;
+}
+
+:root[data-lumen] ::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 0 4px color-mix(in srgb, var(--lumen-text-muted) 35%, transparent) !important;
+}
+
+:root[data-lumen] a:not([class]) {
+    color: var(--lumen-accent-text);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Top navigation: a glass bar with the logo, the search and the account links
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] #NavigationBar {
+    position: sticky;
+    top: 0;
+    z-index: 30;
+    overflow: visible;
+    border-bottom: 1px solid var(--lumen-border-color);
+    background: color-mix(in srgb, var(--lumen-surface-sunken) 78%, transparent);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(18px) saturate(1.2);
+}
+
+:root[data-lumen][data-lumen-sidebar="floating"] #NavigationBar {
+    top: 0.75rem;
+    width: auto;
+    margin: 0.75rem 1rem 0;
+    border: 1px solid var(--lumen-border-color);
+    border-radius: var(--radius-2xl);
+    background: var(--lumen-glass);
+    box-shadow: var(--shadow-md);
+}
+
+:root[data-lumen] #NavigationBar > div {
+    height: var(--lumen-nav-height);
+    max-width: var(--lumen-page-max, 1200px);
+}
+
+:root[data-lumen] #NavigationBar #logo a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.625rem;
+    font-family: var(--lumen-font-display);
+    font-weight: var(--lumen-heading-weight);
+    font-size: calc(1.25rem * var(--lumen-font-scale));
+    letter-spacing: -0.02em;
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] #NavigationBar [class*="RightNavigation"] > :is(a, button, .navigation-link) {
+    position: relative;
+    height: 2.5rem;
+    margin: 0 0.125rem;
+    padding: 0 0.875rem;
+    border-radius: var(--radius-lg);
+    color: var(--lumen-text-muted);
+    box-shadow: none !important;
+    transition:
+        background-color 0.15s var(--lumen-ease),
+        color 0.15s var(--lumen-ease);
+}
+
+:root[data-lumen] #NavigationBar [class*="RightNavigation"] > :is(a, button, .navigation-link):hover {
+    background: var(--lumen-surface-raised);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] #NavigationBar [class*="RightNavigation"] > :is(a, button, .navigation-link).active {
+    background: color-mix(in srgb, var(--lumen-accent) 14%, transparent);
+    color: var(--lumen-accent-text);
+}
+
+/* Logo slots (boot.js adds them next to the panel name, on the login page and in the admin). */
+:root[data-lumen] .lumen-logo {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+}
+
+:root[data-lumen] .lumen-logo img {
+    display: block;
+    height: 100%;
+    width: auto;
+    object-fit: contain;
+}
+
+:root[data-lumen][data-theme="dark"] .lumen-logo .lumen-logo-light,
+:root[data-lumen][data-theme="light"] .lumen-logo .lumen-logo-dark {
+    display: none;
+}
+
+:root[data-lumen] .lumen-nav-logo {
+    height: 1.75rem;
+}
+
+/* Mode toggle */
+:root[data-lumen] .lumen-mode-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: 0;
+    background: transparent;
+    color: inherit;
+}
+
+:root[data-lumen] .lumen-mode-toggle svg {
+    width: 1.15rem;
+    height: 1.15rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+:root[data-lumen] .lumen-mode-toggle--floating {
+    position: fixed;
+    top: 1rem;
+    right: 1rem;
+    z-index: 40;
+    width: 2.5rem;
+    height: 2.5rem;
+    border: 1px solid var(--lumen-border-color);
+    border-radius: 999px;
+    background: var(--lumen-glass);
+    color: var(--lumen-text-muted);
+    box-shadow: var(--shadow-md);
+    backdrop-filter: blur(12px);
+}
+
+:root[data-lumen][data-lumen-toggle="off"] .lumen-mode-toggle {
+    display: none !important;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Sub navigation (server and account pages): a pill bar, or a side rail on wide screens
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] [class*="SubNavigation-"] {
+    margin: 0.75rem auto 0;
+    max-width: calc(var(--lumen-page-max, 1200px) + 2rem);
+    padding: 0 1rem;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+:root[data-lumen] [class*="SubNavigation-"] > div {
+    gap: 0.25rem;
+    width: fit-content;
+    max-width: 100%;
+    margin: 0;
+    padding: 0.375rem;
+    border: 1px solid var(--lumen-border-color);
+    border-radius: var(--radius-xl);
+    background: var(--lumen-glass);
+    box-shadow: var(--shadow-sm);
+    backdrop-filter: blur(14px);
+}
+
+:root[data-lumen] [class*="SubNavigation-"] > div > :is(a, div) {
+    margin: 0 !important;
+    padding: 0.5rem 0.875rem;
+    border-radius: var(--radius-lg);
+    color: var(--lumen-text-muted);
+    font-weight: 500;
+    box-shadow: none !important;
+}
+
+:root[data-lumen] [class*="SubNavigation-"] > div > :is(a, div):hover {
+    background: var(--lumen-surface-raised);
+    color: var(--lumen-text);
+}
+
+:root[data-lumen] [class*="SubNavigation-"] > div > a.active {
+    background: color-mix(in srgb, var(--lumen-accent) 15%, transparent);
+    color: var(--lumen-accent-text);
+}
+
+:root[data-lumen][data-lumen-indicator="bar"] [class*="SubNavigation-"] > div > a.active {
+    background: var(--lumen-surface-raised);
+    box-shadow: inset 0 -2px 0 var(--lumen-accent) !important;
+    color: var(--lumen-text);
+}
+
+:root[data-lumen][data-lumen-indicator="glow"] [class*="SubNavigation-"] > div > a.active {
+    background: linear-gradient(90deg, color-mix(in srgb, var(--lumen-accent) 24%, transparent), color-mix(in srgb, var(--lumen-accent-secondary) 12%, transparent));
+    box-shadow: 0 0 22px -6px color-mix(in srgb, var(--lumen-accent) 60%, transparent) !important;
+    color: var(--lumen-text);
+}
+
+/* Wide screens: the server navigation becomes a side rail next to the content. */
+@media (min-width: 1280px) {
+    :root[data-lumen] body:has([class*="SubNavigation-"] a[href*="/server/"]) {
+        --lumen-rail: var(--sidebar-full-width, 260px);
+    }
+
+    :root[data-lumen] [class*="SubNavigation-"]:has(a[href*="/server/"]) {
+        position: fixed;
+        top: calc(var(--lumen-nav-height) + 2.25rem);
+        bottom: 1rem;
+        left: 1rem;
+        z-index: 20;
+        width: min(var(--lumen-rail), 240px);
+        max-width: none;
+        margin: 0;
+        padding: 0;
+        overflow: visible;
+    }
+
+    :root[data-lumen] [class*="SubNavigation-"]:has(a[href*="/server/"]) > div {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        width: 100%;
+        height: 100%;
+        padding: 0.625rem;
+        overflow-y: auto;
+        border-radius: var(--radius-2xl);
+    }
+
+    :root[data-lumen][data-lumen-sidebar="flush"] [class*="SubNavigation-"]:has(a[href*="/server/"]) {
+        top: var(--lumen-nav-height);
+        bottom: 0;
+        left: 0;
+    }
+
+    :root[data-lumen][data-lumen-sidebar="flush"] [class*="SubNavigation-"]:has(a[href*="/server/"]) > div {
+        border-width: 0 1px 0 0;
+        border-radius: 0;
+        background: var(--lumen-surface-sunken);
+        box-shadow: none;
+    }
+
+    :root[data-lumen] [class*="SubNavigation-"]:has(a[href*="/server/"]) > div > :is(a, div) {
+        padding: 0.625rem 0.875rem;
+    }
+
+    :root[data-lumen] body:has([class*="SubNavigation-"] a[href*="/server/"]) #app > div > :not(#NavigationBar):not([class*="SubNavigation-"]) {
+        margin-left: calc(min(var(--lumen-rail), 240px) + 1rem);
+    }
+}
+
+/* ------------------------------------------------------------------------------------------
+   Page width, cards, rows and boxes
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen][data-lumen-width="full"] {
+    --lumen-page-max: 1320px;
+}
+
+:root[data-lumen][data-lumen-width="wide"] {
+    --lumen-page-max: 1440px;
+}
+
+:root[data-lumen][data-lumen-width="narrow"] {
+    --lumen-page-max: 1200px;
+}
+
+:root[data-lumen] [class*="ContentContainer"] {
+    max-width: var(--lumen-page-max, 1200px);
+}
+
+/* Cards: every panel box is drawn on the surface colour; give them the Lumen frame. */
+:root[data-lumen] :is([class*="ContentBox___"], [class*="TitledGreyBox___"]):not([class*="TitledGreyBox___StyledDiv2"]) {
+    border: 1px solid var(--lumen-border-color);
+    box-shadow: var(--shadow-md);
+}
+
+:root[data-lumen] [class*="TitledGreyBox___StyledDiv2"] {
+    border-bottom-color: var(--lumen-border-color) !important;
+    background: transparent !important;
+}
+
+:root[data-lumen] [class*="TitledGreyBox___StyledP"] {
+    font-family: var(--lumen-font-display);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] [class*="GreyRowBox"] {
+    border: 1px solid var(--lumen-border-color) !important;
+    box-shadow: var(--shadow-sm);
+    transition:
+        border-color 0.15s var(--lumen-ease),
+        transform 0.15s var(--lumen-ease),
+        box-shadow 0.15s var(--lumen-ease);
+}
+
+:root[data-lumen] a[class*="GreyRowBox"]:hover,
+:root[data-lumen] [class*="ServerRow__"]:hover {
+    border-color: color-mix(in srgb, var(--lumen-accent) 55%, var(--lumen-border)) !important;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-1px);
+}
+
+/* The status stripe of a server row. */
+:root[data-lumen] [class*="ServerRow__StatusIndicatorBox"]::before {
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Forms
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) {
+    border-width: 1px !important;
+    border-color: var(--lumen-border) !important;
+    border-radius: var(--radius-lg) !important;
+    background-color: var(--lumen-surface-sunken) !important;
+    color: var(--lumen-text) !important;
+    box-shadow: none;
+    transition:
+        border-color 0.15s var(--lumen-ease),
+        box-shadow 0.15s var(--lumen-ease);
+}
+
+:root[data-lumen] :is(input, select, textarea)::placeholder {
+    color: color-mix(in srgb, var(--lumen-text-muted) 70%, transparent) !important;
+}
+
+:root[data-lumen] :is(input:not([type="checkbox"]):not([type="radio"]), select, textarea):focus {
+    border-color: var(--lumen-focus) !important;
+    box-shadow: var(--lumen-ring) !important;
+}
+
+:root[data-lumen] :is(input[type="checkbox"], input[type="radio"]) {
+    accent-color: var(--lumen-accent);
+}
+
+:root[data-lumen] label {
+    color: var(--lumen-text-muted);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Buttons: the panel's two button styles share one look
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] button,
+:root[data-lumen] [role="button"] {
+    font-family: var(--lumen-font-body);
+}
+
+:root[data-lumen] :is([class*="Button__ButtonStyle"], [class*="button_"]) {
+    border-radius: var(--radius-lg) !important;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    text-transform: none;
+    transition:
+        filter 0.15s var(--lumen-ease),
+        transform 0.15s var(--lumen-ease),
+        box-shadow 0.15s var(--lumen-ease);
+}
+
+:root[data-lumen] :is([class*="Button__ButtonStyle"], [class*="button_"]):not(:disabled):hover {
+    filter: brightness(1.06);
+}
+
+:root[data-lumen] :is([class*="Button__ButtonStyle"], [class*="button_"]):not(:disabled):active {
+    transform: translateY(1px);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Tables, dropdowns, dialogs, tooltips
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+:root[data-lumen] :is(th) {
+    font-family: var(--lumen-font-display);
+    font-weight: 600;
+    color: var(--lumen-text-muted);
+}
+
+:root[data-lumen] :is([role="menu"], [role="dialog"] > div, [class*="DropdownMenu__"], [data-tippy-root] > div) {
+    border-color: var(--lumen-border-color);
+    box-shadow: var(--shadow-xl);
+}
+
+:root[data-lumen] [role="dialog"] {
+    font-family: var(--lumen-font-body);
+}
+
+:root[data-lumen] [data-tippy-root] > div,
+:root[data-lumen] [class*="Tooltip"] {
+    border-radius: var(--radius-md);
+}
+
+/* Flash messages and alerts: tinted cards instead of solid blocks. */
+:root[data-lumen] [class*="MessageBox__Container"] {
+    border-radius: var(--radius-xl);
+    border-width: 1px;
+    color: var(--lumen-text);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Console: always dark (the terminal draws light text), framed like a card
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] .xterm {
+    padding: 0.25rem 0.25rem 0;
+}
+
+:root[data-lumen] .xterm .xterm-viewport {
+    background-color: var(--lumen-console-bg) !important;
+}
+
+:root[data-lumen] :is(.xterm-viewport, .xterm-screen) {
+    border-radius: var(--radius-lg);
+}
+
+:root[data-lumen] [id="terminal"] {
+    background: var(--lumen-console-bg);
+}
+
+:root[data-lumen] [id="terminal"],
+:root[data-lumen] .xterm {
+    color: var(--lumen-console-text);
+}
+
+:root[data-lumen] div:has(> div > [id="terminal"]) {
+    overflow: hidden;
+    border: 1px solid var(--lumen-console-border);
+    border-radius: var(--radius-xl);
+    background: var(--lumen-console-bg);
+    box-shadow: var(--shadow-lg);
+}
+
+:root[data-lumen] div:has(> div > [id="terminal"]) > div:first-child {
+    background: var(--lumen-console-bg) !important;
+}
+
+:root[data-lumen] div:has(> div > [id="terminal"]) input {
+    border-width: 1px 0 0 !important;
+    border-color: var(--lumen-console-border) !important;
+    border-radius: 0 !important;
+    background: var(--lumen-console-surface) !important;
+    color: var(--lumen-console-text) !important;
+    box-shadow: none !important;
+}
+
+:root[data-lumen] div:has(> div > [id="terminal"]) input::placeholder {
+    color: var(--lumen-console-muted) !important;
+}
+
+:root[data-lumen] .xterm-search-bar__addon {
+    border-radius: var(--radius-lg);
+}
+
+/* ------------------------------------------------------------------------------------------
+   File manager and code editor
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen] [class*="FileObjectRow__Row"] {
+    margin-bottom: 0 !important;
+    border-radius: 0 !important;
+    border-width: 0 0 1px !important;
+    border-color: var(--lumen-border-color) !important;
+    box-shadow: none !important;
+}
+
+:root[data-lumen] [class*="FileObjectRow__Row"]:hover {
+    background: var(--lumen-surface-raised) !important;
+    transform: none;
+}
+
+:root[data-lumen] [class*="FileObjectRow__Row"]:first-of-type {
+    border-top-left-radius: var(--radius-xl) !important;
+    border-top-right-radius: var(--radius-xl) !important;
+}
+
+:root[data-lumen] [class*="FileObjectRow__Row"]:last-of-type {
+    border-bottom-left-radius: var(--radius-xl) !important;
+    border-bottom-right-radius: var(--radius-xl) !important;
+}
+
+:root[data-lumen] .CodeMirror {
+    border-radius: var(--radius-xl);
+    font-family: var(--lumen-font-mono);
+}
+
+/* ------------------------------------------------------------------------------------------
+   Login and the other sign-in pages
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen][data-lumen-page="auth"] body {
+    background-color: var(--lumen-canvas);
+    background-image:
+        radial-gradient(60rem 40rem at 15% 10%, color-mix(in srgb, var(--lumen-accent) 22%, transparent), transparent 60%),
+        radial-gradient(50rem 36rem at 90% 90%, color-mix(in srgb, var(--lumen-accent-secondary) 20%, transparent), transparent 60%);
+    background-attachment: fixed;
+}
+
+:root[data-lumen][data-lumen-page="auth"][data-lumen-login="image"] body {
+    background-image:
+        linear-gradient(color-mix(in srgb, var(--lumen-canvas) 45%, transparent), color-mix(in srgb, var(--lumen-canvas) 70%, transparent)),
+        var(--lumen-login-background);
+    background-size: cover;
+    background-position: center;
+}
+
+:root[data-lumen] form:has(img[src$="/assets/svgs/pterodactyl.svg"]) > div {
+    align-items: center;
+    gap: 1.5rem;
+    padding: 2rem !important;
+    border: 1px solid var(--lumen-border-color);
+    border-radius: var(--radius-3xl) !important;
+    background: var(--lumen-glass) !important;
+    box-shadow: var(--shadow-2xl) !important;
+    backdrop-filter: blur(22px) saturate(1.2);
+}
+
+:root[data-lumen] form:has(img[src$="/assets/svgs/pterodactyl.svg"]) > div > div:first-child {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    min-width: 12rem;
+}
+
+:root[data-lumen] .lumen-auth-logo {
+    height: 5.5rem;
+}
+
+:root[data-lumen] .lumen-auth-name {
+    margin: 0;
+    font-family: var(--lumen-font-display);
+    font-size: calc(1.25rem * var(--lumen-font-scale));
+    font-weight: var(--lumen-heading-weight);
+    letter-spacing: -0.02em;
+    color: var(--lumen-text);
+    text-align: center;
+}
+
+:root[data-lumen][data-lumen-page="auth"] h2 {
+    font-size: calc(1.875rem * var(--lumen-font-scale));
+    letter-spacing: -0.025em;
+}
+
+/* ------------------------------------------------------------------------------------------
+   Density: compact trims the row and card padding a little more than the spacing unit does
+   ------------------------------------------------------------------------------------------ */
+
+:root[data-lumen][data-lumen-density="compact"] [class*="GreyRowBox"] {
+    padding-top: calc(3 * var(--spacing));
+    padding-bottom: calc(3 * var(--spacing));
+}
+
+:root[data-lumen][data-lumen-shadow="none"] * {
+    --tw-shadow: 0 0 #0000 !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root[data-lumen] * {
+        transition: none !important;
+        animation-duration: 0.01ms !important;
+    }
+}
+
+/* Banner while the editor's draft is previewed in this tab. */
+:root[data-lumen] .lumen-preview-banner {
+    position: fixed;
+    bottom: 1rem;
+    left: 50%;
+    z-index: 60;
+    transform: translateX(-50%);
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+    background: var(--lumen-gradient);
+    color: var(--lumen-accent-contrast);
+    font-size: 0.8125rem;
+    font-weight: 600;
+    box-shadow: var(--shadow-lg);
+}

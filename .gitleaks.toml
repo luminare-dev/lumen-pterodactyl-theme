@@ -55,3 +55,9 @@ description = "Discord webhook URL (anyone with the URL can post to the channel)
 regex = '''https://(?:(?:canary|ptb)\.)?discord(?:app)?\.com/api/webhooks/[0-9]{17,20}/([A-Za-z0-9_-]{60,80})'''
 secretGroup = 1
 keywords = ["discord.com/api/webhooks", "discordapp.com/api/webhooks"]
+
+# shared.lock lists sha256 digests of the shared token files (scripts/check_shared.py); they are
+# public file hashes, not secrets.
+[[allowlists]]
+description = "sha256 digests in shared.lock"
+paths = ['''^shared\.lock$''']

@@ -20,7 +20,7 @@ const document = {
     createElement: () => el(),
 };
 class MutationObserver { observe() {} }
-const window = { LumenAppearance: { area: 'client', mode: { default: 'dark', allowToggle: true } }, addEventListener() {} };
+const window = { LumenAppearance: { area: 'client', mode: { default: 'dark', allowToggle: true } }, addEventListener() {}, location: { search: '' } };
 window.CSSStyleSheet = function () {};
 window.CSSStyleSheet.prototype.insertRule = function () { return 0; };
 vm.runInNewContext(source, { window, document, MutationObserver, WeakSet, Math, parseInt, parseFloat, isNaN, String, Object, JSON });
@@ -46,6 +46,35 @@ for (const [input, expected] of cases) {
         console.log(`value ${input}\n  got      ${got}\n  expected ${expected}`);
         failed++;
     }
+}
+for (const [input, prop, expected] of [['#fff', 'background-color', 'var(--lp-white-bg)'], ['#fff', 'color', 'var(--lp-white)']]) {
+    const got = convertValue(input, prop);
+    if (got !== expected) {
+        console.log(`${prop}: ${input} got ${got}`);
+        failed++;
+    }
+}
+for (const [prop, input, expected] of [
+    ['border-radius', '0.25rem', 'var(--radius-md)'],
+    ['border-top-left-radius', '.5rem', 'var(--radius-lg)'],
+    ['border-radius', '9999px', '9999px'],
+    ['padding-left', '1rem', 'calc(4 * var(--spacing))'],
+    ['gap', '0.5rem 1.5rem', 'calc(2 * var(--spacing)) calc(6 * var(--spacing))'],
+    ['font-size', '0.875rem', 'calc(0.875rem * var(--lumen-font-scale))'],
+    ['font-family', '"IBM Plex Sans", Roboto, system-ui, sans-serif', 'var(--lumen-font-display)'],
+    ['box-shadow', '0 1px 3px 0 rgba(0, 0, 0, 0.1)', '0 1px 3px 0 rgb(var(--lumen-shadow-rgb) / calc(0.1 * var(--lumen-shadow-alpha) * 6.67))'],
+    ['margin-left', '1rem', '1rem'],
+]) {
+    const got = convertValue(input, prop);
+    if (got !== expected) {
+        console.log(`${prop}: ${input}\n  got      ${got}\n  expected ${expected}`);
+        failed++;
+    }
+}
+const hover = convertRuleText('.b:hover{background-color:#ffffff}');
+if (hover !== '.b:hover{background-color:var(--lp-white-bg)}') {
+    console.log(`hover rule got ${hover}`);
+    failed++;
 }
 const rule = '.a-sc-1{--tw-bg-opacity:1;background-color:hsla(209,20%,25%,var(--tw-bg-opacity));color:#fff;}';
 const out = convertRuleText(rule);

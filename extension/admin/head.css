@@ -1,0 +1,13 @@
+/* Lumen theme: loaded in the admin <head> by Blueprint. The colours arrive with the wrapper at
+   the end of the page, so the page stays hidden until boot.js has set data-lumen (or for at most
+   0.8 s, so a page without the wrapper still shows). */
+@keyframes lumen-reveal {
+    to {
+        opacity: 1;
+    }
+}
+
+html:not([data-lumen]) body.skin-blue {
+    opacity: 0;
+    animation: lumen-reveal 0.15s linear 0.8s forwards;
+}
