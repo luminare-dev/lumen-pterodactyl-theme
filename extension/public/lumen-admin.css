@@ -37,6 +37,12 @@
    Base
    ------------------------------------------------------------------------------------------ */
 
+/* Bootstrap 3 sets the root font size to 10px; Lumen's rem sizes assume the browser's 16px.
+   Bootstrap itself sizes in px, so this changes nothing else. */
+html[data-lumen][data-lumen-area="admin"] {
+    font-size: 16px;
+}
+
 :root[data-lumen] body,
 :root[data-lumen] .wrapper,
 :root[data-lumen] .content-wrapper,
@@ -466,6 +472,7 @@
 
 :root[data-lumen] .box-header {
     padding: calc(4 * var(--spacing)) calc(5 * var(--spacing));
+    background: transparent !important;
     color: var(--lumen-text);
 }
 

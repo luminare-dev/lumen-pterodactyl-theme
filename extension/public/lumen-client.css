@@ -422,7 +422,7 @@
 }
 
 /* Cards: every panel box is drawn on the surface colour; give them the Lumen frame. */
-:root[data-lumen] :is([class*="ContentBox___"], [class*="TitledGreyBox___"]):not([class*="TitledGreyBox___StyledDiv2"]) {
+:root[data-lumen] :is(div[class*="ContentBox___StyledDiv"], div[class*="TitledGreyBox___StyledDiv"]):not([class*="TitledGreyBox___StyledDiv2"]):not([class*="TitledGreyBox___StyledDiv3"]) {
     border: 1px solid var(--lumen-border-color);
     box-shadow: var(--shadow-md);
 }
