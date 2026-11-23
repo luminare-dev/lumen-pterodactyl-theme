@@ -37,6 +37,12 @@
    Base
    ------------------------------------------------------------------------------------------ */
 
+/* Bootstrap 3 sets the root font size to 10px; Lumen's rem sizes assume the browser's 16px.
+   Bootstrap itself sizes in px, so this changes nothing else. */
+html[data-lumen][data-lumen-area="admin"] {
+    font-size: 16px;
+}
+
 :root[data-lumen] body,
 :root[data-lumen] .wrapper,
 :root[data-lumen] .content-wrapper,
@@ -420,6 +426,10 @@
     color: var(--lumen-text-muted);
 }
 
+:root[data-lumen] .breadcrumb > li > a {
+    color: var(--lumen-accent-text) !important;
+}
+
 :root[data-lumen] .content {
     padding: calc(5 * var(--spacing)) calc(6 * var(--spacing)) calc(8 * var(--spacing));
 }
@@ -466,6 +476,7 @@
 
 :root[data-lumen] .box-header {
     padding: calc(4 * var(--spacing)) calc(5 * var(--spacing));
+    background: transparent !important;
     color: var(--lumen-text);
 }
 
@@ -511,6 +522,10 @@
 
 :root[data-lumen] .info-box-content {
     color: var(--lumen-text);
+}
+
+:root[data-lumen] .small-box > .inner p {
+    color: var(--lumen-text-muted) !important;
 }
 
 :root[data-lumen] .callout,
@@ -724,9 +739,25 @@
     color: var(--lumen-accent-text);
 }
 
+/* Sub-labels inside a button ("Get Help (via Discord)"): the button's own colour, lighter weight. */
+:root[data-lumen] .btn small,
+:root[data-lumen] .btn .small {
+    color: inherit !important;
+    font-weight: 400;
+}
+
+/* Disabled: a flat, dashed, muted button instead of a faded colour one, so the label keeps at
+   least 3:1 on every preset while it still reads as off. */
 :root[data-lumen] .btn.disabled,
-:root[data-lumen] .btn[disabled] {
-    opacity: 0.55;
+:root[data-lumen] .btn[disabled],
+:root[data-lumen] fieldset[disabled] .btn {
+    opacity: 1;
+    border: 1px dashed var(--lumen-border) !important;
+    background: var(--lumen-surface-raised) !important;
+    color: color-mix(in srgb, var(--lumen-text-muted) 80%, var(--lumen-surface-raised)) !important;
+    box-shadow: none !important;
+    filter: none;
+    cursor: not-allowed;
 }
 
 :root[data-lumen] .label,

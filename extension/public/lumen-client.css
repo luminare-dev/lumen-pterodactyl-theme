@@ -38,6 +38,11 @@
     --lp-grey-700: var(--lumen-surface);
     --lp-grey-800: var(--lumen-canvas);
     --lp-grey-900: var(--lumen-surface-sunken);
+    /* The dark greys as text colour (sub-labels on cards): muted text, not invisible. */
+    --lp-grey-text-600: color-mix(in srgb, var(--lumen-text-muted) 75%, var(--lumen-border));
+    --lp-grey-text-700: color-mix(in srgb, var(--lumen-text-muted) 70%, var(--lumen-border));
+    --lp-grey-text-800: color-mix(in srgb, var(--lumen-text-muted) 65%, var(--lumen-border));
+    --lp-grey-text-900: color-mix(in srgb, var(--lumen-text-muted) 60%, var(--lumen-border));
 
     --lp-accent-50: var(--lumen-accent-contrast);
     --lp-accent-100: color-mix(in srgb, var(--lumen-accent-text) 45%, var(--lumen-text));
@@ -182,7 +187,7 @@
     box-shadow: var(--shadow-md);
 }
 
-:root[data-lumen] #NavigationBar > div {
+:root[data-lumen] #NavigationBar > div:has(#logo) {
     height: var(--lumen-nav-height);
     max-width: var(--lumen-page-max, 1200px);
 }
@@ -388,7 +393,11 @@
     }
 
     :root[data-lumen] body:has([class*="SubNavigation-"] a[href*="/server/"]) #app > div > :not(#NavigationBar):not([class*="SubNavigation-"]) {
-        margin-left: calc(min(var(--lumen-rail), 240px) + 1rem);
+        box-sizing: border-box;
+        width: auto !important;
+        max-width: none;
+        margin-left: calc(min(var(--lumen-rail), 240px) + 1.5rem);
+        margin-right: 1rem;
     }
 }
 
@@ -413,7 +422,7 @@
 }
 
 /* Cards: every panel box is drawn on the surface colour; give them the Lumen frame. */
-:root[data-lumen] :is([class*="ContentBox___"], [class*="TitledGreyBox___"]):not([class*="TitledGreyBox___StyledDiv2"]) {
+:root[data-lumen] :is(div[class*="ContentBox___StyledDiv"], div[class*="TitledGreyBox___StyledDiv"]):not([class*="TitledGreyBox___StyledDiv2"]):not([class*="TitledGreyBox___StyledDiv3"]) {
     border: 1px solid var(--lumen-border-color);
     box-shadow: var(--shadow-md);
 }
@@ -511,6 +520,28 @@
 
 :root[data-lumen] :is([class*="Button__ButtonStyle"], [class*="button_"]):not(:disabled):active {
     transform: translateY(1px);
+}
+
+/* Disabled: flat, dashed and muted instead of a faded colour button (the panel's 50% opacity left
+   "Start" pale blue on light). The label keeps at least 3:1 on every preset. */
+/* In the production build the new buttons' CSS-module classes are "style-module_<hash>", so the
+   element selector carries them. A disabled button the panel forces to a colour (the "Primary"
+   allocation badge) is a status label, not an off switch: it gets the accent pair instead. */
+:root[data-lumen] :is([class*="Button__ButtonStyle"], [class*="button_"], button[class*="style-module_"]):disabled:not([class*="!bg-"]) {
+    opacity: 1 !important;
+    border: 1px dashed var(--lumen-border) !important;
+    background: var(--lumen-surface-raised) !important;
+    color: color-mix(in srgb, var(--lumen-text-muted) 80%, var(--lumen-surface-raised)) !important;
+    box-shadow: none !important;
+    filter: none !important;
+    cursor: not-allowed;
+}
+
+:root[data-lumen] button[class*="!bg-"]:disabled {
+    opacity: 1 !important;
+    background: var(--lumen-accent) !important;
+    color: var(--lumen-accent-contrast) !important;
+    cursor: default;
 }
 
 /* ------------------------------------------------------------------------------------------

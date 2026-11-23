@@ -226,6 +226,9 @@
         if (/background/.test(currentProp)) {
             if (slot === 'white') return 'white-bg';
         }
+        if ((currentProp === 'color' || currentProp === 'fill' || currentProp === '-webkit-text-fill-color') && /^grey-[6-9]00$/.test(slot)) {
+            return 'grey-text-' + slot.slice(5);
+        }
         return slot;
     }
 

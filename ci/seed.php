@@ -160,5 +160,10 @@ $try('subuser', function () use ($first, $mira) {
     );
 });
 
+$try('blueprint introduction', function () {
+    app(\Pterodactyl\BlueprintFramework\Libraries\ExtensionLibrary\Console\BlueprintConsoleLibrary::class)
+        ->dbSet('blueprint', 'flags:introduction_dismissed', true);
+});
+
 echo 'seeded: ' . User::query()->count() . ' users, ' . Server::query()->count() . " servers\n";
 echo $first->uuidShort . "\n";

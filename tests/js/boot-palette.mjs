@@ -64,6 +64,8 @@ for (const [prop, input, expected] of [
     ['font-family', '"IBM Plex Sans", Roboto, system-ui, sans-serif', 'var(--lumen-font-display)'],
     ['box-shadow', '0 1px 3px 0 rgba(0, 0, 0, 0.1)', '0 1px 3px 0 rgb(var(--lumen-shadow-rgb) / calc(0.1 * var(--lumen-shadow-alpha) * 6.67))'],
     ['margin-left', '1rem', '1rem'],
+    ['color', 'hsl(209, 14%, 37%)', 'var(--lp-grey-text-600)'],
+    ['background-color', 'hsl(209, 14%, 37%)', 'var(--lp-grey-600)'],
 ]) {
     const got = convertValue(input, prop);
     if (got !== expected) {
