@@ -12,6 +12,8 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN apk add --no-cache bash curl unzip zip git coreutils sed rsync ncurses nodejs npm
 
+RUN mkdir -p /app/var \
+    && printf '[mysql]\nskip-ssl\n' > /etc/my.cnf.d/ci.cnf
 # The disposable CI database has no TLS; Laravel's schema import uses the MariaDB CLI.
 RUN printf '[client]\nskip-ssl\n' > /etc/my.cnf.d/ci.cnf \
     && mkdir -p /app/var
