@@ -12,6 +12,10 @@ SHELL ["/bin/ash", "-eo", "pipefail", "-c"]
 
 RUN apk add --no-cache bash curl unzip zip git coreutils sed rsync ncurses nodejs npm
 
+# The disposable CI database has no TLS; Laravel's schema import uses the MariaDB CLI.
+RUN printf '[client]\nskip-ssl\n' > /etc/my.cnf.d/ci.cnf \
+    && mkdir -p /app/var
+
 RUN curl -fsSL -o /tmp/blueprint.zip \
         "https://github.com/BlueprintFramework/framework/releases/download/${BLUEPRINT_VERSION}/release.zip" \
     && echo "${BLUEPRINT_SHA256}  /tmp/blueprint.zip" | sha256sum -c - \
