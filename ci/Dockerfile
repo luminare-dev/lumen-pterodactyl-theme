@@ -14,6 +14,10 @@ RUN apk add --no-cache bash curl unzip zip git coreutils sed rsync ncurses nodej
 
 RUN mkdir -p /app/var \
     && printf '[mysql]\nskip-ssl\n' > /etc/my.cnf.d/ci.cnf
+# The entrypoint keeps its generated .env in /app/var; the CI database has no TLS, and the newer
+# MariaDB client refuses plain connections unless told so (used by Laravel's schema load).
+RUN mkdir -p /app/var /etc/my.cnf.d \
+    && printf '[client]\nskip-ssl\n' > /etc/my.cnf.d/lumen-ci.cnf
 
 RUN curl -fsSL -o /tmp/blueprint.zip \
         "https://github.com/BlueprintFramework/framework/releases/download/${BLUEPRINT_VERSION}/release.zip" \

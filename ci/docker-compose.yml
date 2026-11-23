@@ -59,3 +59,4 @@ services:
       MAIL_MAILER: log
       MAIL_DRIVER: log
       TRUSTED_PROXIES: "*"
+      RECAPTCHA_ENABLED: "false"

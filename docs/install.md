@@ -47,7 +47,10 @@ Blueprint copies the files, runs the migration (tables `lumen_appearance` and
 Until you save there, the panel uses the Luminare preset.
 
 With Blueprint's Docker image, put the file into the extensions folder you mounted
-(`/blueprint_extensions`) and run `docker compose exec panel blueprint -install lumen`.
+(`/blueprint_extensions`) and run `docker compose exec panel blueprint -install lumen`. Inside
+Docker, Blueprint leaves migrations to the container start, so run
+`docker compose exec panel php artisan migrate --force` (or restart the panel container) once
+after installing.
 
 ### What gets installed
 

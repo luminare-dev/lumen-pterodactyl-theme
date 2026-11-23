@@ -26,7 +26,19 @@ logos without a rebuild.
 [![licence](https://img.shields.io/github/license/luminare-dev/lumen-pterodactyl-theme)](LICENSE)
 
 <!-- screenshots:begin -->
-Screenshots follow from the first green `panel` run.
+| Dark | Light |
+|---|---|
+| ![Client dashboard, dark](docs/screenshots/client-dashboard-dark.png) | ![Client dashboard, light](docs/screenshots/client-dashboard-light.png) |
+| ![Server console, dark](docs/screenshots/client-console-dark.png) | ![Server console, light](docs/screenshots/client-console-light.png) |
+| ![Login, dark](docs/screenshots/login-dark.png) | ![Login, light](docs/screenshots/login-light.png) |
+| ![Admin, node, dark](docs/screenshots/admin-node-dark.png) | ![Admin, servers, light](docs/screenshots/admin-servers-light.png) |
+| ![Customizer, dark](docs/screenshots/admin-lumen-dark.png) | ![Customizer, light](docs/screenshots/admin-lumen-light.png) |
+| ![File manager, dark](docs/screenshots/client-files-dark.png) | ![Backups, light](docs/screenshots/client-backups-light.png) |
+| ![Unsaved Aurora draft previewed in the client area](docs/screenshots/client-draft-preview-dark.png) | ![Account, light](docs/screenshots/client-account-light.png) |
+
+Screenshots from CI (the `screenshots` artifact of the `panel` workflow), with invented example
+data and a mock daemon. The last dark image is the client area previewing an unsaved Aurora draft
+from the customizer.
 <!-- screenshots:end -->
 
 ## Why

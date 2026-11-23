@@ -1,7 +1,7 @@
 info:
   name: "Lumen"
   identifier: "lumen"
-  description: "A modern light and dark theme for the client and admin area, with a live customizer for colours, fonts, spacing, layout and logos."
+  description: "A modern light and dark theme with a live customizer for colours, fonts, layout and logos."
   flags: "ignorePlaceholders"
   version: "0.1.0"
   target: "beta-2026-08"
