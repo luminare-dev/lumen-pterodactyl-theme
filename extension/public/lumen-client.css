@@ -522,6 +522,28 @@
     transform: translateY(1px);
 }
 
+/* Disabled: flat, dashed and muted instead of a faded colour button (the panel's 50% opacity left
+   "Start" pale blue on light). The label keeps at least 3:1 on every preset. */
+/* In the production build the new buttons' CSS-module classes are "style-module_<hash>", so the
+   element selector carries them. A disabled button the panel forces to a colour (the "Primary"
+   allocation badge) is a status label, not an off switch: it gets the accent pair instead. */
+:root[data-lumen] :is([class*="Button__ButtonStyle"], [class*="button_"], button[class*="style-module_"]):disabled:not([class*="!bg-"]) {
+    opacity: 1 !important;
+    border: 1px dashed var(--lumen-border) !important;
+    background: var(--lumen-surface-raised) !important;
+    color: color-mix(in srgb, var(--lumen-text-muted) 80%, var(--lumen-surface-raised)) !important;
+    box-shadow: none !important;
+    filter: none !important;
+    cursor: not-allowed;
+}
+
+:root[data-lumen] button[class*="!bg-"]:disabled {
+    opacity: 1 !important;
+    background: var(--lumen-accent) !important;
+    color: var(--lumen-accent-contrast) !important;
+    cursor: default;
+}
+
 /* ------------------------------------------------------------------------------------------
    Tables, dropdowns, dialogs, tooltips
    ------------------------------------------------------------------------------------------ */
