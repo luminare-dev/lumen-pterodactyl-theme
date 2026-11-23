@@ -38,6 +38,11 @@
     --lp-grey-700: var(--lumen-surface);
     --lp-grey-800: var(--lumen-canvas);
     --lp-grey-900: var(--lumen-surface-sunken);
+    /* The dark greys as text colour (sub-labels on cards): muted text, not invisible. */
+    --lp-grey-text-600: color-mix(in srgb, var(--lumen-text-muted) 75%, var(--lumen-border));
+    --lp-grey-text-700: color-mix(in srgb, var(--lumen-text-muted) 70%, var(--lumen-border));
+    --lp-grey-text-800: color-mix(in srgb, var(--lumen-text-muted) 65%, var(--lumen-border));
+    --lp-grey-text-900: color-mix(in srgb, var(--lumen-text-muted) 60%, var(--lumen-border));
 
     --lp-accent-50: var(--lumen-accent-contrast);
     --lp-accent-100: color-mix(in srgb, var(--lumen-accent-text) 45%, var(--lumen-text));
@@ -182,7 +187,7 @@
     box-shadow: var(--shadow-md);
 }
 
-:root[data-lumen] #NavigationBar > div {
+:root[data-lumen] #NavigationBar > div:has(#logo) {
     height: var(--lumen-nav-height);
     max-width: var(--lumen-page-max, 1200px);
 }
@@ -388,7 +393,11 @@
     }
 
     :root[data-lumen] body:has([class*="SubNavigation-"] a[href*="/server/"]) #app > div > :not(#NavigationBar):not([class*="SubNavigation-"]) {
-        margin-left: calc(min(var(--lumen-rail), 240px) + 1rem);
+        box-sizing: border-box;
+        width: auto !important;
+        max-width: none;
+        margin-left: calc(min(var(--lumen-rail), 240px) + 1.5rem);
+        margin-right: 1rem;
     }
 }
 

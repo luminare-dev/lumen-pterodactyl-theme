@@ -115,6 +115,8 @@ jobs:
           dc="docker compose -f ci/docker-compose.yml --env-file ci/.env"
           $dc cp dist/lumen.blueprint panel:/app/lumen.blueprint
           $dc exec -T panel bash -c 'cd /app && yes | blueprint -install lumen' | tee "$RUNNER_TEMP/install.log"
+          # Blueprint leaves migrations to the container entrypoint in Docker; run them now.
+          $dc exec -T panel php artisan migrate --force
           $dc exec -T panel bash -c 'ls -la /app/public/extensions/ /app/resources/views/blueprint/dashboard/wrappers/'
           curl -fsS http://localhost:8080/extensions/lumen/boot.js -o /dev/null
           curl -fsS http://localhost:8080/auth/login | grep -q 'id="lumen-tokens"'
