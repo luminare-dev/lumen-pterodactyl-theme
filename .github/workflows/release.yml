@@ -24,3 +24,10 @@ jobs:
       issues: write          # release-please labels
       id-token: write        # Sigstore certificate for the attestation
       attestations: write    # store the attestation
+    with:
+      # lumen.blueprint is attached next to the source archive and listed in SHA256SUMS.
+      node-version: "22"
+      package-command: |
+        node --no-warnings scripts/build-js.mjs
+        python3 scripts/build_blueprint.py --out dist --version "$VERSION"
+        python3 -m unittest tests.test_lumen
