@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/luminare-dev/lumen-pterodactyl-theme/compare/v0.1.0...v0.1.1) (2026-11-25)
+
+
+### Fixed
+
+* **tokens:** escape &lt; in custom CSS instead of filtering tags ([e09cfbf](https://github.com/luminare-dev/lumen-pterodactyl-theme/commit/e09cfbfb507022162355fd63333b3bd3520b3b88))
+
 ## 0.1.0 (2026-11-23)
 
 
