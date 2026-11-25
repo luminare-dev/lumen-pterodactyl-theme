@@ -94,9 +94,14 @@ class TokenCompiler
         return $value === '' ? 'none' : 'url("' . $value . '")';
     }
 
+    /**
+     * Makes custom CSS safe inside a <style> element: every `<` becomes the CSS escape `\3c `, so no
+     * `</style`, `<!--` or `<script` can appear in the output, in any case or spelling. In a CSS
+     * string the escape still reads as `<`; anywhere else `<` is not valid CSS, so nothing is lost.
+     */
     public static function sanitizeCustomCss(string $css): string
     {
-        return preg_replace('/<!--|-->/', '', preg_replace('/<\/?\s*style/i', '', $css));
+        return str_replace('<', '\\3c ', $css);
     }
 
     public static function number(int|float $value): string

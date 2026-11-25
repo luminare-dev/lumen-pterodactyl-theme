@@ -89,5 +89,47 @@
                 "productName": "<b>Panel</b>"
             }
         }
+    },
+    {
+        "name": "css breakout: closing tag",
+        "input": {
+            "customCss": ".x{color:red}</style><script>alert(1)</script>"
+        }
+    },
+    {
+        "name": "css breakout: upper case and space",
+        "input": {
+            "customCss": ".x{}</STYLE ><img src=x onerror=alert(1)>"
+        }
+    },
+    {
+        "name": "css breakout: split tag",
+        "input": {
+            "customCss": ".x{}<</style>/style><script>alert(1)</script>"
+        }
+    },
+    {
+        "name": "css breakout: html comments",
+        "input": {
+            "customCss": "<!-- .x{} --> .y{} --!> <!--<script>"
+        }
+    },
+    {
+        "name": "css breakout: tabs and slashes",
+        "input": {
+            "customCss": ".x{}</style\t/><svg onload=alert(1)>"
+        }
+    },
+    {
+        "name": "css breakout: unicode and escapes",
+        "input": {
+            "customCss": ".x{content:\"\\3c /style>\"}＜/style＞ \\</style><script>"
+        }
+    },
+    {
+        "name": "css strings keep their meaning",
+        "input": {
+            "customCss": ".x::before{content:\"a < b\"} .a > .b{color:red}"
+        }
     }
 ]

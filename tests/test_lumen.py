@@ -55,7 +55,7 @@ class Parity(unittest.TestCase):
     def test_markup_never_reaches_the_stylesheet(self):
         data = json.loads(run(["php", "tests/parity/run.php"]).stdout)
         for name, case in data["cases"].items():
-            self.assertNotIn("</style", case["css"].lower(), name)
+            self.assertNotIn("<", case["css"], name)
 
     def test_token_urls_map_to_the_extension(self):
         data = json.loads(run(["php", "tests/parity/run.php"]).stdout)
